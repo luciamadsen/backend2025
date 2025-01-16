@@ -1,0 +1,15 @@
+<nav>
+    <a href="/">Inicio</a>
+    <% if (user && user.role === 'premium') { %>
+      <a href="/premium">Acceder a Premium</a>
+    <% } %>
+    <% if (user && user.role === 'admin') { %>
+      <a href="/admin">Panel Admin</a>
+    <% } %>
+    <% if (user) { %>
+      <a href="/logout">Cerrar sesión</a>
+    <% } else { %>
+      <a href="/login">Iniciar sesión</a>
+    <% } %>
+  </nav>
+  

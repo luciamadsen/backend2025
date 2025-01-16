@@ -1,10 +1,9 @@
-const Ticket = require('../models/Ticket');
+const ticketDao = require('../dao/ticketDao');
 
 const ticketController = {
   createTicket: async (req, res) => {
     try {
-      const ticket = new Ticket(req.body);
-      await ticket.save();
+      const ticket = await ticketDao.create(req.body);
       res.status(201).json(ticket);
     } catch (err) {
       res.status(500).json({ error: 'Error creando el ticket', details: err.message });
@@ -12,7 +11,7 @@ const ticketController = {
   },
   getTickets: async (req, res) => {
     try {
-      const tickets = await Ticket.find();
+      const tickets = await ticketDao.findAll();
       res.status(200).json(tickets);
     } catch (err) {
       res.status(500).json({ error: 'Error obteniendo tickets', details: err.message });
@@ -20,7 +19,7 @@ const ticketController = {
   },
   getTicketById: async (req, res) => {
     try {
-      const ticket = await Ticket.findById(req.params.id);
+      const ticket = await ticketDao.findById(req.params.id);
       if (!ticket) return res.status(404).json({ error: 'Ticket no encontrado' });
       res.status(200).json(ticket);
     } catch (err) {
@@ -29,7 +28,7 @@ const ticketController = {
   },
   updateTicket: async (req, res) => {
     try {
-      const ticket = await Ticket.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const ticket = await ticketDao.updateById(req.params.id, req.body);
       if (!ticket) return res.status(404).json({ error: 'Ticket no encontrado' });
       res.status(200).json(ticket);
     } catch (err) {
@@ -38,7 +37,7 @@ const ticketController = {
   },
   deleteTicket: async (req, res) => {
     try {
-      const ticket = await Ticket.findByIdAndDelete(req.params.id);
+      const ticket = await ticketDao.deleteById(req.params.id);
       if (!ticket) return res.status(404).json({ error: 'Ticket no encontrado' });
       res.status(200).json({ message: 'Ticket eliminado con éxito' });
     } catch (err) {
